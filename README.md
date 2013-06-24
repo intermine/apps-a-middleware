@@ -1,10 +1,11 @@
-# Apps/A Middleware (Node.js) Codename "Pear"
+#Apps/A Middleware (Node.js)
+##Codename "Pear"
 
 ![image](https://github.com/intermine/apps-a-middleware/raw/master/pear.png)
 
 A [Node.js](http://nodejs.org/) reference implementation of a **middleware** for loading and rendering Apps.
 
-## Quickstart
+##Quickstart
 
 ```bash
 $ npm install
@@ -13,7 +14,7 @@ $ PORT=1234 node example/index.js
 
 And then visit [127.0.0.1:1234](http://127.0.0.1:1234).
 
-## [Connect](http://www.senchalabs.org/connect/) Middleware
+##[Connect](http://www.senchalabs.org/connect/) Middleware
 
 ```coffeescript
 #!/usr/bin/env coffee
