@@ -10,6 +10,7 @@ winston   = require 'winston'
 { exec }  = require 'child_process'
 { _ }     = require 'lodash'
 fs        = _.extend require('fs-extra'), require('fs')
+ts        = require 'typescript.api'
 
 winston.cli()
 
@@ -59,7 +60,7 @@ exports.app = (path, callback, config, cb) ->
                 return cb err if err
 
                 # Patterns for matching types.
-                patterns = [ /^presenter\.(coffee|js|ls)$/, /^style\.styl|css$/, /\.eco$/ ]
+                patterns = [ /^presenter\.(coffee|js|ls|ts)$/, /^style\.styl|css$/, /\.eco$/ ]
 
                 # Which is it?
                 results = []
@@ -102,6 +103,12 @@ exports.app = (path, callback, config, cb) ->
                             return cb (''+err).replace('\n', '') if err
                             return cb stderr if stderr
                             cb null, [ 'presenter', stdout ]
+
+                    # TypeScript for you (API liable to blow up).
+                    when 'ts'
+                        ts.build [ path + '/' + file ], (err, source, declaration) ->
+                            return cb ( e.toString() for e in err ).join('\n') if err
+                            cb null, [ 'presenter', source ]
 
         # The stylesheet.
         (cb) ->
