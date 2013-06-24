@@ -1,7 +1,7 @@
 {
-    "name": "intermine-fatapps",
+    "name": "apps-a-middleware",
     "author": "Radek <rs676@cam.ac.uk>",
-    "version": "1.0.0-alpha",
+    "version": "1.0.0",
     "dependencies": {
         "coffee-script": "1.6.2",
         "flatiron": "0.3.5",
@@ -23,7 +23,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/intermine/intermine-fatapps-middleware.git"
+        "url": "https://github.com/intermine/apps-a-middleware.git"
     },
     "scripts": {
         "start": "example/index.js"

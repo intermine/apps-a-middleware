@@ -115,7 +115,7 @@ exports.app = (path, callback, config, cb) ->
 
                 pack = (css) ->
                     # Prefix CSS selectors with a callback id.
-                    css = prefix.css css, "div#w#{callback}"
+                    css = prefix.css css, "div#a#{callback}"
                     # Escape all single quotes, minify & return.
                     css = cleanCss.process css.replace /\'/g, "\\'"
                     cb null, [ 'style', css ]
@@ -276,8 +276,8 @@ exports.client = (cb = ->) ->
                 fs.outputFile path, data, cb
 
         async.parallel [
-            process('./example/public/js/intermine.fatapps.js')
-            process('./example/public/js/intermine.fatapps.min.js', true)
+            process('./example/public/js/intermine.apps-a.js')
+            process('./example/public/js/intermine.apps-a.min.js', true)
         ], cb
 
     ], (err) ->

@@ -1,18 +1,17 @@
 #!/usr/bin/env node
-var app, connect, http, middleware, byggir;
+var app, connect, http, middleware, builder;
 
 require('coffee-script');
 http = require('http');
 connect = require('connect');
 middleware = require('../middleware.coffee');
-byggir = require('../byggir.coffee');
+builder = require('../builder.coffee');
 
 // Do the client first.
-byggir.client(function() {
+builder.client(function() {
     // Setup the Connect middleware.
     app = connect().use(middleware({
-        //'apps': ['git://github.com/intermine/example-fatapps.git'],
-        'apps': ['file:///home/radek/dev/example-fatapps'],
+        'apps': ['git://github.com/intermine/intermine-apps-a.git'],
         'config': __dirname + '/config.json'
     })).use(connect["static"](__dirname + '/public'));
 

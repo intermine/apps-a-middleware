@@ -10,7 +10,7 @@ fs       = _.extend require('fs-extra'), require('fs')
 winston.cli()
 
 # Require builder.
-byggir = require './byggir.coffee'
+builder = require './builder.coffee'
 
 # We are here.
 dir = __dirname
@@ -40,7 +40,7 @@ routes = (config) ->
             res.end()
 
     # List all available apps.
-    '/embedding/fatapps':
+    '/middleware/apps/a':
         'get': ->
             res = respond @res
 
@@ -55,7 +55,7 @@ routes = (config) ->
                 return res 500, { 'message': 'Provide a `callback` parameter so we can respond with JSONP' }
 
     # Get a single app.
-    '/embedding/fatapps/:appId':
+    '/middleware/apps/a/:appId':
         'get': (appId) ->
             res = respond @res
 
@@ -222,7 +222,7 @@ module.exports = (opts) ->
                             config[id] = _.extend config[id], json
 
                             # Build it... and they will come.
-                            byggir.app path, null, null, (err, js) ->
+                            builder.app path, null, null, (err, js) ->
                                 return cb err if err
                                 
                                 # Since we are writing the result into a file, make sure that the file begins with an exception if read directly.

@@ -7,13 +7,13 @@
     <!-- API loader for dependency resolution -->
     <script src="http://cdn.intermine.org/js/intermine/api-loader/latest/intermine.api.js"></script>
 
-    <!-- fatapp client -->
-    <script src="js/intermine.fatapps.js"></script>
+    <!-- apps client -->
+    <script src="js/intermine.apps-a.js"></script>
 
     <script>
     (function() {
         // Pointing to us, sans `/dev.html` suffix.
-        var client = new intermine.fatApps(document.location.href.replace(/\/(.*)$/, ''));
+        var client = new intermine.appsA(document.location.href.replace(/\/(.*)$/, ''));
         // Load the app.
         client.load('identifier-resolution', 'body', {
             'mine': 'http://beta.flymine.org/beta', // which mine to connect to

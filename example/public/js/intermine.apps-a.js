@@ -1,5 +1,5 @@
 (function() {
-  var FatAppsClient, root, _each, _extend, _setImmediate, _uid,
+  var AppsClient, root, _each, _extend, _setImmediate, _uid,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   root = this;
@@ -64,28 +64,26 @@
     throw 'An old & unsupported browser detected';
   }
 
-  FatAppsClient = (function() {
-    FatAppsClient.prototype.selectorPrefix = 'w';
-
-    function FatAppsClient(server) {
+  AppsClient = (function() {
+    function AppsClient(server) {
       this.load = __bind(this.load, this);
       var callback,
         _this = this;
 
       this.server = server.replace(/\/+$/, '');
-      callback = 'rwc' + +(new Date);
+      callback = 'appcall' + +(new Date);
       root[callback] = function(config) {
         _this.config = config;
       };
       root.intermine.load([
         {
-          'path': "" + this.server + "/embedding/fatapps?callback=" + callback,
+          'path': "" + this.server + "/middleware/apps/a?callback=" + callback,
           'type': 'js'
         }
       ]);
     }
 
-    FatAppsClient.prototype.load = function(appId, target, options) {
+    AppsClient.prototype.load = function(appId, target, options) {
       var again, deps, run,
         _this = this;
 
@@ -107,16 +105,16 @@
         uid = _uid();
         return root.intermine.load([
           {
-            'path': "" + _this.server + "/embedding/fatapps/" + appId + "?callback=" + uid,
+            'path': "" + _this.server + "/middleware/apps/a/" + appId + "?callback=" + uid,
             'type': 'js'
           }
         ], function(err) {
           var app, article, config, div, fn, instance, templates;
 
           article = document.createElement('article');
-          article.setAttribute('class', "-im-fatapps " + appId);
+          article.setAttribute('class', "-im-apps-a " + appId);
           div = document.createElement('div');
-          div.setAttribute('id', 'w' + uid);
+          div.setAttribute('id', 'a' + uid);
           div.appendChild(article);
           document.querySelector(target).appendChild(div);
           if (!root.intermine.temp) {
@@ -129,12 +127,12 @@
           config = _extend(config, options);
           instance = new fn(config, templates);
           if (!(instance && typeof instance === 'object')) {
-            throw 'Widget failed to instantiate';
+            throw 'App failed to instantiate';
           }
           if (!(instance.render && typeof instance.render === 'function')) {
-            throw 'Widget does not implement `render` function';
+            throw 'App does not implement `render` function';
           }
-          return instance.render("#w" + uid + " article.-im-fatapps");
+          return instance.render("#a" + uid + " article.-im-apps-a");
         });
       };
       deps = this.config[appId];
@@ -145,14 +143,14 @@
       }
     };
 
-    return FatAppsClient;
+    return AppsClient;
 
   })();
 
   if (!root.intermine) {
     throw 'You need to include the InterMine API Loader first!';
   } else {
-    root.intermine.fatApps = root.intermine.fatApps || FatAppsClient;
+    root.intermine.appsA = root.intermine.appsA || AppsClient;
   }
 
 }).call(this);

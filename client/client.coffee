@@ -4,10 +4,7 @@ root = this
 # Can we work?
 throw 'An old & unsupported browser detected' unless document.querySelector
 
-class FatAppsClient
-
-    # So that we do not start a selector with a number...
-    selectorPrefix: 'w'
+class AppsClient
 
     # Save the root URL of the app config
     constructor: (server) ->
@@ -15,14 +12,14 @@ class FatAppsClient
         @server = server.replace /\/+$/, ''
         
         # Generate a callback.
-        callback = 'rwc' + +new Date
+        callback = 'appcall' + +new Date
 
         # A callback setting the config on us..
         root[callback] = (@config) =>
 
         # Load it.
         root.intermine.load [
-            'path': "#{@server}/embedding/fatapps?callback=#{callback}"
+            'path': "#{@server}/middleware/apps/a?callback=#{callback}"
             'type': 'js'
         ]
     
@@ -46,15 +43,15 @@ class FatAppsClient
 
             # Get the compiled script.
             root.intermine.load [
-                'path': "#{@server}/embedding/fatapps/#{appId}?callback=#{uid}"
+                'path': "#{@server}/middleware/apps/a/#{appId}?callback=#{uid}"
                 'type': 'js'
             ], (err) =>
                 # Create a wrapper for the target.
                 article = document.createElement 'article'
-                article.setAttribute 'class', "-im-fatapps #{appId}"
+                article.setAttribute 'class', "-im-apps-a #{appId}"
 
                 div = document.createElement 'div'
-                div.setAttribute 'id', 'w' + uid
+                div.setAttribute 'id', 'a' + uid
                 div.appendChild article
 
                 # Append it to the target, IE8+.
@@ -76,13 +73,13 @@ class FatAppsClient
                 instance = new fn config, templates
 
                 # Did we create anything?
-                throw 'Widget failed to instantiate' unless instance and typeof instance is 'object'
+                throw 'App failed to instantiate' unless instance and typeof instance is 'object'
 
                 # Do we implement render function?
-                throw 'Widget does not implement `render` function' unless instance.render and typeof instance.render is 'function'
+                throw 'App does not implement `render` function' unless instance.render and typeof instance.render is 'function'
 
                 # Render.
-                instance.render "#w#{uid} article.-im-fatapps"
+                instance.render "#a#{uid} article.-im-apps-a"
 
         # Load dependencies?
         deps = @config[appId]
@@ -95,4 +92,4 @@ if not root.intermine
     throw 'You need to include the InterMine API Loader first!'
 else
     # Expose class globally?
-    root.intermine.fatApps = root.intermine.fatApps or FatAppsClient
+    root.intermine.appsA = root.intermine.appsA or AppsClient

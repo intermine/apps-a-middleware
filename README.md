@@ -1,8 +1,8 @@
-# InterMine FatApps Middleware (Node.js)
+# Apps/A Middleware (Node.js) Codename "Pear"
 
-A [Node.js](http://nodejs.org/) reference implementation of a **middleware** for loading and rendering Fat Apps (previously called Report Widgets).
+![image](https://github.com/intermine/apps-a-middleware/raw/master/pear.png)
 
-![image](https://github.com/intermine/intermine-fatapps-middleware/raw/master/example/example.png)
+A [Node.js](http://nodejs.org/) reference implementation of a **middleware** for loading and rendering Apps.
 
 ## Quickstart
 
@@ -25,7 +25,7 @@ middleware = require '../middleware.coffee'
 app = connect()
 .use(middleware
     'apps': [
-        'git://github.com/intermine/example-fatapps.git'
+        'git://github.com/intermine/intermine-apps-a.git'
     ]
     'config': __dirname + '/config.json'
 )
@@ -36,8 +36,8 @@ http.createServer(app).listen process.env.PORT
 
 The middleware accepts two params. One, `apps`, is an Array of paths to app sources. This can be any of the following:
 
-1. Git paths on the net like: `git://github.com/intermine/example-fatapps.git`
-1. Local file paths: `file:///home/dev/example-fatapps`
+1. Git paths on the net like: `git://github.com/intermine/intermine-apps-a.git`
+1. Local file paths: `file:///home/dev/intermine-apps-a`
 
 The other parameter, `config`, represents the configuration you want merged with the config from the apps sources. This can be one of the following:
 
@@ -48,7 +48,7 @@ Only the first parameter is required.
 
 Then, the middleware provides you with two routes:
 
-1. GET `/embedding/fatapps` - which gives you a config for all the apps it can serve
-2. GET `/embedding/fatapps/:appId` - which returns one app
+1. GET `/middleware/apps/a` - which gives you a config for all the apps it can serve
+2. GET `/middleware/apps/a/:appId` - which returns one app
 
-Both URLs are being used internally by the FatApp client (see `example/public/js/intermine.fatapps.js`).
+Both URLs are being used internally by the Apps client (see `example/public/js/intermine.fatapps.js`).

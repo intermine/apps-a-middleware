@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>InterMine FatApps</title>
+    <title>InterMine Apps/A Example</title>
 
     <link rel="stylesheet" href="css/foundation3.css">
     <link rel="stylesheet" href="css/tricolore.css">
@@ -19,21 +19,21 @@
     <!-- API loader for dependency resolution -->
     <script src="http://cdn.intermine.org/js/intermine/api-loader/latest/intermine.api.js"></script>
 
-    <!-- fatapp client -->
-    <script src="js/intermine.fatapps.js"></script>
+    <!-- apps client -->
+    <script src="js/intermine.apps-a.js"></script>
 
     <script>
         // Pointing to us.
-        var client = new intermine.fatApps(document.location.href);
+        var client = new intermine.appsA(document.location.href);
     </script>
 </head>
 <body>
     <div class="row">
         <div class="ten columns">
-            <h2>InterMine FatApps</h2>
+            <h2>InterMine Apps/A Example</h2>
         </div>
         <div id="docs" class="two columns">
-            <a target="_blank" href="http://intermine.readthedocs.org/en/latest/embedding/fatapps/">Read the Docs</a>
+            <a target="_blank" href="http://intermine.readthedocs.org/en/latest/embedding/apps-a/">Read the Docs</a>
         </div>
     </div>
 
@@ -41,10 +41,10 @@
         <div class="twelve columns">
         <h3>Dendrogram Clustering</h3>
         <pre><code data-language="javascript">
-// Use InterMine API Loader to fetch FatApps client.
-intermine.load('fatapps', function(err) {
+// Use InterMine API Loader to fetch Apps client.
+intermine.load('apps-a', function(err) {
     // Instantiate the library pointing to a service.
-    var client = new intermine.fatApps('http://intermine-fatapps.labs.intermine.org');
+    var client = new intermine.appsA('http://apps-a-middleware.labs.intermine.org');
     // Load a specific app after satisfying its dependencies; passing target & extra config.
     client.load('mouse-phenotype-dendrogram', '#dendrogram', { 'width': 790, 'height': 600, 'symbol': 'MGI:97747' });
 });
@@ -62,10 +62,10 @@ intermine.load('fatapps', function(err) {
         <div class="twelve columns">
         <h3>Histogram</h3>
         <pre><code data-language="javascript">
-// Use InterMine API Loader to fetch FatApps client.
-intermine.load('fatapps', function(err) {
+// Use InterMine API Loader to fetch Apps client.
+intermine.load('apps-a', function(err) {
     // Instantiate the library pointing to a service.
-    var client = new intermine.fatApps('http://intermine-fatapps.labs.intermine.org');
+    var client = new intermine.appsA('http://apps-a-middleware.labs.intermine.org');
     // Load a specific app after satisfying its dependencies; passing target & extra config.
     client.load('spell-histogram', '#spell', { 'type': 'Gene', 'symbol': 'S000001863' });
 });
@@ -83,10 +83,10 @@ intermine.load('fatapps', function(err) {
         <div class="twelve columns">
         <h3>Gene Mine Pathways</h3>
         <pre><code data-language="javascript">
-// Use InterMine API Loader to fetch FatApps client.
-intermine.load('fatapps', function(err) {
+// Use InterMine API Loader to fetch Apps client.
+intermine.load('apps-a', function(err) {
     // Instantiate the library pointing to a service.
-    var client = new intermine.fatApps('http://intermine-fatapps.labs.intermine.org');
+    var client = new intermine.appsA('http://apps-a-middleware.labs.intermine.org');
     // Load a specific app after satisfying its dependencies; passing target & extra config.
     client.load('pathways-displayer', '#pathways', { 'symbol': 'G-ialpha65A' });
 });
@@ -104,10 +104,10 @@ intermine.load('fatapps', function(err) {
         <div class="twelve columns">
         <h3>Publications Displayer</h3>
         <pre><code data-language="javascript">
-// Use InterMine API Loader to fetch FatApps client.
-intermine.load('fatapps', function(err) {
+// Use InterMine API Loader to fetch Apps client.
+intermine.load('apps-a', function(err) {
     // Instantiate the library pointing to a service.
-    var client = new intermine.fatApps('http://intermine-fatapps.labs.intermine.org');
+    var client = new intermine.appsA('http://apps-a-middleware.labs.intermine.org');
     // Load a specific app after satisfying its dependencies; passing target & extra config.
     client.load('publications-displayer', '#publications', { 'symbol': 'zen' });
 });
