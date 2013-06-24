@@ -10,7 +10,6 @@ winston   = require 'winston'
 { exec }  = require 'child_process'
 { _ }     = require 'lodash'
 fs        = _.extend require('fs-extra'), require('fs')
-ts        = require 'typescript.api'
 
 winston.cli()
 
@@ -104,11 +103,15 @@ exports.app = (path, callback, config, cb) ->
                             return cb stderr if stderr
                             cb null, [ 'presenter', stdout ]
 
-                    # TypeScript for you (API liable to blow up).
+                    # Use the latest vanilla TypeScript compiler available.
                     when 'ts'
-                        ts.build [ path + '/' + file ], (err, source, declaration) ->
-                            return cb ( e.toString() for e in err ).join('\n') if err
-                            cb null, [ 'presenter', source ]
+                        exec './node_modules/.bin/tsc ' + path + '/' + file, (err, stdout, stderr) ->
+                            return cb err if err
+                            return cb stderr if stderr
+                            # Need to read it now.
+                            fs.readFile path + '/' + file.replace('.ts', '.js'), 'utf-8', (err, data) ->
+                                return cb err if err
+                                cb null, [ 'presenter', data ]
 
         # The stylesheet.
         (cb) ->

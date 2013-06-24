@@ -15,7 +15,7 @@
         // Pointing to us, sans `/dev.html` suffix.
         var client = new intermine.appsA(document.location.href.replace(/\/(.*)$/, ''));
         // Load the app.
-        client.load('identifier-resolution', 'body', {
+        client.load('choose-list', 'body', {
             'mine': 'http://beta.flymine.org/beta', // which mine to connect to
             'type': 'many', // one OR many
             // Defaults in the forms.

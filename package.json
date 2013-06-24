@@ -1,7 +1,7 @@
 {
     "name": "apps-a-middleware",
     "author": "Radek <rs676@cam.ac.uk>",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "dependencies": {
         "coffee-script": "1.6.2",
         "flatiron": "0.3.5",
@@ -20,7 +20,7 @@
         "parserlib": "0.1.8",
         "prefix-css-node": "0.4.0",
         "LiveScript": "1.1.1",
-        "typescript.api": "0.4.2"
+        "typescript": "0.9.0"
     },
     "repository": {
         "type": "git",
