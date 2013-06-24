@@ -83,7 +83,7 @@ routes = (config) ->
                         obj = _.cloneDeep app
 
                         # Some defaults.
-                        obj.classExpr ?= 'Widget'
+                        obj.classExpr ?= 'App'
                         obj.config = JSON.stringify obj.config or {}
                         
                         # Not a default.
@@ -139,7 +139,7 @@ module.exports = (opts) ->
         , (cb) ->
             for key, value of config
                 if encodeURIComponent(key) isnt key
-                    return cb "Widget id `#{key}` is not a valid name and cannot be used, use encodeURIComponent() to check"
+                    return cb "App id `#{key}` is not a valid name and cannot be used, use encodeURIComponent() to check"
 
             cb null
         

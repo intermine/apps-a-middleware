@@ -167,7 +167,7 @@ exports.app = (path, callback, config, cb) ->
             js.push """
                 /**
                  *      _/_/_/  _/      _/   
-                 *       _/    _/_/  _/_/     InterMine Report Widget
+                 *       _/    _/_/  _/_/     App/A
                  *      _/    _/  _/  _/      (C) 2013 InterMine, University of Cambridge.
                  *     _/    _/      _/       http://intermine.org
                  *  _/_/_/  _/      _/
