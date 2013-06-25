@@ -84,8 +84,10 @@ routes = (config) ->
 
                         # Some defaults.
                         obj.classExpr ?= 'App'
+                        # The config can have example fns but we remove them now.
+                        # Otherwise in which context are they supposed to run?
                         obj.config = JSON.stringify obj.config or {}
-                        
+
                         # Not a default.
                         obj.callback = callback
 
@@ -210,27 +212,28 @@ module.exports = (opts) ->
                         winston.data 'Maybe app is in ' + path.bold
 
                         # Read the config file maybe?
-                        fs.readJson path + '/' + 'config.json', (err, json) ->
-                            # No JSON or erroneous JSON, no app man.
-                            return cb null if err
+                        try
+                            data = require(path + '/' + 'config.js')
+                        catch err
+                            return cb err
 
-                            # What is the id of the app again?
-                            id = path.split('/').pop()
+                        # What is the id of the app again?
+                        id = path.split('/').pop()
 
-                            # Extend our config with this one.
-                            config[id] ?= {} # init?
-                            config[id] = _.extend config[id], json
+                        # Extend our config with this one.
+                        config[id] ?= {} # init?
+                        config[id] = _.extend config[id], data
 
-                            # Build it... and they will come.
-                            builder.app path, null, null, (err, js) ->
-                                return cb err if err
-                                
-                                # Since we are writing the result into a file, make sure that the file begins with an exception if read directly.
-                                js = 'new Error(\'This app cannot be called directly\');\n' + js
+                        # Build it... and they will come.
+                        builder.app path, null, null, (err, js) ->
+                            return cb err if err
+                            
+                            # Since we are writing the result into a file, make sure that the file begins with an exception if read directly.
+                            js = 'new Error(\'This app cannot be called directly\');\n' + js
 
-                                path = [ dir, 'tmp/build', id + '.js' ].join('/')
-                                winston.info 'Writing ' + path.bold
-                                fs.writeFile path, js, cb
+                            path = [ dir, 'tmp/build', id + '.js' ].join('/')
+                            winston.info 'Writing ' + path.bold
+                            fs.writeFile path, js, cb
                     , cb
 
                 ], cb

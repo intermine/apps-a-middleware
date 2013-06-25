@@ -13,7 +13,8 @@ builder.client(function() {
     app = connect().use(middleware({
         'apps': ['git://github.com/intermine/intermine-apps-a.git'],
         //'apps': ['file:///home/radek/dev/intermine-apps-a/'],
-        'config': __dirname + '/config.json'
+        //'config': __dirname + '/config.json'
+        'config': {}
     })).use(connect["static"](__dirname + '/public'));
 
     // Serve.
