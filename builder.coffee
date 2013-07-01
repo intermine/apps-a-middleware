@@ -20,6 +20,9 @@ prefix    = require 'prefix-css-node'
 
 winston.cli()
 
+# We are here.
+dir = __dirname
+
 ###
 Precompile a single app.
 @param {string} path A URL-valid appId.
@@ -105,14 +108,14 @@ exports.app = (path, callback, config, cb) ->
 
                     # LiveScript then.
                     when 'ls'
-                        exec './node_modules/.bin/lsc -bpc < ' + path + '/' + file, (err, stdout, stderr) ->
+                        exec "#{dir}/node_modules/.bin/lsc -bpc < #{path}/#{file}", (err, stdout, stderr) ->
                             return cb (''+err).replace('\n', '') if err
                             return cb stderr if stderr
                             cb null, [ 'presenter', stdout ]
 
                     # Use the latest vanilla TypeScript compiler available.
                     when 'ts'
-                        exec './node_modules/.bin/tsc ' + path + '/' + file, (err, stdout, stderr) ->
+                        exec "#{dir}/node_modules/.bin/tsc #{path}/#{file}", (err, stdout, stderr) ->
                             return cb err if err
                             return cb stderr if stderr
                             # Need to read it now.
@@ -267,17 +270,18 @@ exports.client = (cb = ->) ->
     async.waterfall [ (cb) ->
         compile = (f) ->
             (cb) ->
-                fs.readFile f, 'utf-8', (err, data) ->
+                # Remember to use absolute paths.
+                fs.readFile dir + f, 'utf-8', (err, data) ->
                     return cb err if err
                     cb null, [ f, data ]
 
         # Run checks in parallel.
-        async.parallel ( compile f for f in [ './client/client.coffee', './client/client.deps.coffee' ] ), (err, results) ->
+        async.parallel ( compile f for f in [ '/client/client.coffee', '/client/client.deps.coffee' ] ), (err, results) ->
             return cb err if err
 
             # Swap?
             [ a, b ] = results
-            ( a[0] is './client/client.coffee' and [ b, a ] = [ a, b ] )
+            ( a[0] is '/client/client.coffee' and [ b, a ] = [ a, b ] )
 
             # Add paths and join.
             merged = [ a[1], b[1] ].join('\n')
@@ -293,20 +297,20 @@ exports.client = (cb = ->) ->
 
     # Write it.
     , (js, cb) ->
-        process = (path, compress=false) ->
+        process = (path, compress=no) ->
             (cb) ->
                 # Compress?
                 try
-                    data = if compress then (uglify.minify(js, 'fromString': true)).code else js
+                    data = if compress then (uglify.minify(js, 'fromString': yes)).code else js
                 catch err
                     return cb err
 
-                # Actually write.
-                fs.outputFile path, data, cb
+                # Actually write, prefix with absolute path.
+                fs.outputFile dir + path, data, cb
 
         async.parallel [
-            process('./example/public/js/intermine.apps-a.js')
-            process('./example/public/js/intermine.apps-a.min.js', true)
+            process('/example/public/js/intermine.apps-a.js')
+            process('/example/public/js/intermine.apps-a.min.js', yes)
         ], cb
 
     ], (err) ->
