@@ -1,15 +1,22 @@
 #!/usr/bin/env coffee
-eco       = require 'eco'
-cs        = require 'coffee-script'
-stylus    = require 'stylus'
-uglify    = require 'uglify-js'
-cleanCss  = require 'clean-css'
-prefix    = require 'prefix-css-node'
 async     = require 'async'
 winston   = require 'winston'
 { exec }  = require 'child_process'
 { _ }     = require 'lodash'
 fs        = _.extend require('fs-extra'), require('fs')
+
+# Templating.
+eco       = require 'eco'
+hogan     = require 'hogan.js'
+
+# Logic.
+cs        = require 'coffee-script'
+uglify    = require 'uglify-js'
+
+# Style.
+stylus    = require 'stylus'
+cleanCss  = require 'clean-css'
+prefix    = require 'prefix-css-node'
 
 winston.cli()
 
@@ -59,7 +66,7 @@ exports.app = (path, callback, config, cb) ->
                 return cb err if err
 
                 # Patterns for matching types.
-                patterns = [ /^presenter\.(coffee|js|ls|ts)$/, /^style\.styl|css$/, /\.eco$/ ]
+                patterns = [ /^presenter\.(coffee|js|ls|ts)$/, /^style\.(styl|css)$/, /\.(eco|hogan)$/ ]
 
                 # Which is it?
                 results = []
@@ -154,11 +161,23 @@ exports.app = (path, callback, config, cb) ->
                     fs.readFile path + '/' + file, 'utf-8', (err, src) ->
                         return cb err if err
 
-                        # Precompile template.
-                        template = eco.precompile src
+                        # Get the name and suffix.
+                        [ name, suffix ] = file.split('.')
 
-                        # Minify.
-                        cb null, (uglify.minify(("templates['#{file[0...-4]}'] = #{template}") + ';', 'fromString': true)).code
+                        # Which filetype?
+                        switch suffix
+                            # Eco.
+                            when 'eco'
+                                template = eco.precompile src
+                                # Minify.
+                                cb null, (uglify.minify(("templates['#{name}'] = #{template}") + ';', 'fromString': yes)).code
+
+                            # Mustache through Hogan.
+                            when 'hogan'
+                                # Make into a string.
+                                template = hogan.compile src, { asString: yes }
+                                # Already minified.
+                                cb null, "templates['#{name}'] = #{template};"
 
             # Process all templates in parallel.
             async.parallel ( process file for file in templates  ), (err, results) ->

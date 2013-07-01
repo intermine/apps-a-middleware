@@ -16,28 +16,14 @@
         var client = new intermine.appsA(document.location.href.replace(/\/(.*)$/, ''));
         // Load the app.
         client.load('choose-list', 'body', {
-            'mine': 'http://beta.flymine.org/beta', // which mine to connect to
-            'type': 'many', // one OR many
-            // Defaults in the forms.
-            'defaults': {
-                'identifiers': [ 'PPARG', 'ZEN', 'MAD', 'ftz', 'Adh' ], // one identifier taken from the head
-                'type': 'Gene',
-                'organism': 'D. melanogaster'
-            },
-            // Provided input, if any.
-            'provided': {
-                'identifiers': [ 'MAD' ],
-                'type': 'Gene',
-                'organism': 'C. elegans'
-            },
             // A callback called at least once.
-            cb: function(err, working, query) {
+            cb: function(err, working, list) {
                 // Has error happened?
                 if (err) throw err;
                 // Are you working?
                 console.log('working:', working);
-                // Are you done? Dump the query then.
-                console.log('query:', query);
+                // Are you done? Dump the list then.
+                console.log('list:', list);
             }
         });
     })();
