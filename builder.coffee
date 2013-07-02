@@ -115,7 +115,7 @@ exports.app = (path, callback, config, cb) ->
 
                     # Use the latest vanilla TypeScript compiler available.
                     when 'ts'
-                        exec "#{dir}/node_modules/.bin/tsc #{path}/#{file}", (err, stdout, stderr) ->
+                        exec "#{dir}/node_modules/.bin/tsc #{path}/#{file} --target ES5", (err, stdout, stderr) ->
                             return cb err if err
                             return cb stderr if stderr
                             # Need to read it now.
