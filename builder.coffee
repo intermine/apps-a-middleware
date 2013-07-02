@@ -61,7 +61,6 @@ exports.app = (path, callback, config, cb) ->
                 (cb) ->
                     fs.stat path + '/' + entry, (err, stats) ->
                         return cb err if err or not stats
-                        return cb 'A directory is not currently supported' if stats.isDirectory()
                         cb null, entry
 
             # Check them all at once.
