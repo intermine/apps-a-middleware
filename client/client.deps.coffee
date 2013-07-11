@@ -27,9 +27,9 @@ _extend = (obj) ->
 
     obj
 
-# Generate a UID.
-_uid = ->
-    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
+# Generate an ID.
+_id = ->
+    'xxxxxxxx'.replace /[xy]/g, (c) ->
         r = Math.random() * 16 | 0
         (if c is "x" then r else r & 0x3 | 0x8).toString 16
 

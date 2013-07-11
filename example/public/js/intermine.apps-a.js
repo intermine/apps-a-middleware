@@ -1,5 +1,5 @@
 (function() {
-  var AppsClient, root, _each, _extend, _setImmediate, _uid,
+  var AppsClient, root, _base, _base1, _each, _extend, _id, _ref, _ref1, _setImmediate,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   root = this;
@@ -49,8 +49,8 @@
     return obj;
   };
 
-  _uid = function() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  _id = function() {
+    return 'xxxxxxxx'.replace(/[xy]/g, function(c) {
       var r;
 
       r = Math.random() * 16 | 0;
@@ -97,42 +97,43 @@
         return _setImmediate(again);
       }
       run = function(err) {
-        var uid;
+        var id;
 
         if (err) {
-          throw err;
+          throw new Error(err);
         }
-        uid = _uid();
+        id = _id();
         return root.intermine.load([
           {
-            'path': "" + _this.server + "/middleware/apps/a/" + appId + "?callback=" + uid,
+            'path': "" + _this.server + "/middleware/apps/a/" + appId + "?callback=" + id,
             'type': 'js'
           }
         ], function(err) {
-          var app, article, config, div, fn, instance, templates;
+          var app, config, div, instance, module, templates;
 
-          article = document.createElement('article');
-          article.setAttribute('class', "-im-apps-a " + appId);
           div = document.createElement('div');
-          div.setAttribute('id', 'a' + uid);
-          div.appendChild(article);
+          div.setAttribute('class', "-im-apps-a " + appId);
+          div.setAttribute('id', 'a' + id);
           document.querySelector(target).appendChild(div);
           if (!root.intermine.temp) {
-            throw '`intermine.temp` object cache does not exist';
+            throw new Error('`intermine.temp` object cache does not exist');
           }
-          if (!(app = root.intermine.temp.apps[uid])) {
-            throw "Unknown app `" + uid + "`";
+          if (!(app = root.intermine.temp.apps[id])) {
+            throw new Error("Unknown app `" + id + "`");
           }
-          fn = app[0], config = app[1], templates = app[2];
+          module = app[0], config = app[1], templates = app[2];
+          if (!module.App) {
+            throw new Error('Root module is not exporting App');
+          }
           config = _extend(config, options);
-          instance = new fn(config, templates);
+          instance = new module.App(config, templates);
           if (!(instance && typeof instance === 'object')) {
-            throw 'App failed to instantiate';
+            throw new Error('App failed to instantiate');
           }
           if (!(instance.render && typeof instance.render === 'function')) {
-            throw 'App does not implement `render` function';
+            throw new Error('App does not implement `render` function');
           }
-          return instance.render("#a" + uid + " article.-im-apps-a");
+          return instance.render("#a" + id + ".-im-apps-a");
         });
       };
       deps = this.config[appId];
@@ -148,9 +149,17 @@
   })();
 
   if (!root.intermine) {
-    throw 'You need to include the InterMine API Loader first!';
+    throw new Error('You need to include the InterMine API Loader first!');
   } else {
     root.intermine.appsA = root.intermine.appsA || AppsClient;
+  }
+
+  if ((_ref = (_base = root.intermine).temp) == null) {
+    _base.temp = {};
+  }
+
+  if ((_ref1 = (_base1 = root.intermine.temp).apps) == null) {
+    _base1.apps = {};
   }
 
 }).call(this);

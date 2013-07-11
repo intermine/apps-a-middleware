@@ -36,50 +36,50 @@ class AppsClient
         # Post dependencies loaded.
         run = (err) =>
             # Any loading problems?
-            throw err if err
+            throw new Error(err) if err
 
-            # Generate callback UID.
-            uid = _uid()
+            # Generate callback id.
+            id = _id()
 
             # Get the compiled script.
             root.intermine.load [
-                'path': "#{@server}/middleware/apps/a/#{appId}?callback=#{uid}"
+                'path': "#{@server}/middleware/apps/a/#{appId}?callback=#{id}"
                 'type': 'js'
             ], (err) =>
                 # Create a wrapper for the target.
-                article = document.createElement 'article'
-                article.setAttribute 'class', "-im-apps-a #{appId}"
-
                 div = document.createElement 'div'
-                div.setAttribute 'id', 'a' + uid
-                div.appendChild article
+                div.setAttribute 'class', "-im-apps-a #{appId}"
+                div.setAttribute 'id', 'a' + id
 
                 # Append it to the target, IE8+.
                 document.querySelector(target).appendChild div
                 
                 # Do we have the temp directory to save apps under?
-                throw '`intermine.temp` object cache does not exist' unless root.intermine.temp
+                throw new Error('`intermine.temp` object cache does not exist') unless root.intermine.temp
 
                 # Get the app from there.
-                throw "Unknown app `#{uid}`" unless app = root.intermine.temp.apps[uid]
+                throw new Error("Unknown app `#{id}`") unless app = root.intermine.temp.apps[id]
 
                 # Get the instantiation fn, server config and templates from the app.
-                [ fn, config, templates ] = app
+                [ module, config, templates ] = app
                 
+                # Do we have an App over here?
+                throw new Error('Root module is not exporting App') unless module.App
+
                 # Merge server and client config.
                 config = _extend config, options
 
                 # Create a new instance passing merged config and templates.
-                instance = new fn config, templates
+                instance = new module.App config, templates
 
                 # Did we create anything?
-                throw 'App failed to instantiate' unless instance and typeof instance is 'object'
+                throw new Error('App failed to instantiate') unless instance and typeof instance is 'object'
 
                 # Do we implement render function?
-                throw 'App does not implement `render` function' unless instance.render and typeof instance.render is 'function'
+                throw new Error('App does not implement `render` function') unless instance.render and typeof instance.render is 'function'
 
                 # Render.
-                instance.render "#a#{uid} article.-im-apps-a"
+                instance.render "#a#{id}.-im-apps-a"
 
         # Load dependencies?
         deps = @config[appId]
@@ -89,7 +89,11 @@ class AppsClient
 
 # Do we have the InterMine API Loader?
 if not root.intermine
-    throw 'You need to include the InterMine API Loader first!'
+    throw new Error 'You need to include the InterMine API Loader first!'
 else
     # Expose class globally?
     root.intermine.appsA = root.intermine.appsA or AppsClient
+
+# Namespace?
+root.intermine.temp ?= {}
+root.intermine.temp.apps ?= {}

@@ -75,18 +75,16 @@ routes = (config) ->
                         fs.readFile path, 'utf8', cb
                     
                     # Process the file.
-                    (js, cb) ->
-                        # Remove the leading line.
-                        js = (js.split("\n")[1...]).join("\n")
-                        
+                    (js, cb) ->                        
                         # Make a clone for us.
                         obj = _.cloneDeep app
 
-                        # Some defaults.
-                        obj.classExpr ?= 'App'
                         # The config can have example fns but we remove them now.
                         # Otherwise in which context are they supposed to run?
                         obj.config = JSON.stringify obj.config or {}
+
+                        # Default app root index module thing.
+                        obj.appRoot ?= 'presenter' # `/presenter.ts` etc.
 
                         # Not a default.
                         obj.callback = callback
@@ -227,9 +225,6 @@ module.exports = (opts) ->
                         # Build it... and they will come.
                         builder.app path, null, null, (err, js) ->
                             return cb err if err
-                            
-                            # Since we are writing the result into a file, make sure that the file begins with an exception if read directly.
-                            js = 'new Error(\'This app cannot be called directly\');\n' + js
 
                             path = [ dir, 'tmp/build', id + '.js' ].join('/')
                             winston.info 'Writing ' + path.bold
