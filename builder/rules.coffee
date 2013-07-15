@@ -3,10 +3,10 @@ log = require 'node-logging'
 
 # All the handlers we know about.
 rules = [
-    [ /^(presenter|app)((\.coffee)|(\/(.*)\.coffee))/g, 'module', 'coffeescript' ]
-    [ /^(presenter|app)((\.js)|(\/(.*)\.js))/g, 'module', 'generic' ]
-    [ /^(presenter|app)((\.ls)|(\/(.*)\.ls))/g, 'module', 'livescript' ]
-    [ /^(presenter|app)((\.ts)|(\/(.*)\.ts))/g, 'module', 'typescript' ]
+    [ /^((presenter|app)(\.coffee))|(\/(.*)\.coffee)/g, 'module', 'coffeescript' ]
+    [ /^((presenter|app)(\.js))|(\/(.*)\.js)/g, 'module', 'generic' ]
+    [ /^((presenter|app)(\.ls))|(\/(.*)\.ls)/g, 'module', 'livescript' ]
+    [ /^((presenter|app)(\.ts))|(\/([^\.]*)\.ts)/g, 'module', 'typescript' ] # skip `.d.ts`
     [ /^(.*)\.css/g, 'style', 'generic' ]
     [ /^(.*)\.styl/g, 'style', 'stylus' ]
     [ /^(.*)\.eco/g, 'template', 'eco' ]
