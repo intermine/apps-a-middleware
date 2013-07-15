@@ -12,9 +12,9 @@
  *  Version: <%= @config.version %>
  *  Generated: <%= (new Date()).toUTCString() %>
  */
-(function(root) {
+(function() {
     /**#@+ the app */
     <%- clean @content %>
     // Expose the app for what it is.
-    root.intermine.temp.apps['<%= @callback %>'] = [ require('<%= @config.appRoot %>'), config, templates ];
-})(this);
+    intermine.temp.apps['<%= @callback %>'] = [ require('<%= @config.appRoot %>'), config, templates ];
+})();

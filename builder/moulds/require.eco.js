@@ -1,8 +1,7 @@
-// Define require here so we can use it in our callback.
-var require;
+// Require (Common.js) implementation.
+var require = {};
 
-(function() {
-    // Require (Common.js) implementation.
+(function(exports) {
     var modules = {};
     var cache = {};
 
@@ -60,7 +59,7 @@ var require;
         throw new Error('Cannot find module "' + name + '"');
     };
 
-    var define = function(bundle, fn) {
+    require.register = require.define = function(bundle, fn) {
         if (typeof bundle === 'object') {
             for (var key in bundle) {
                 if (has(bundle, key)) {
@@ -72,9 +71,9 @@ var require;
         }
     };
 
-    // All our modules belong to us.
-    (function() {
-        <%- @modules.join('\n') %>
-    })();
+})();
 
+// All our modules will see the exported require.
+(function() {
+    <%- @modules.join('\n') %>
 })();

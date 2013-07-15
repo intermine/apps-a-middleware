@@ -1,6 +1,6 @@
 <% clean = (input) => %><%- input.replace(/\.[^/.]+$/, '') %><% end %>
 
 // <%= @path.split('/').pop() %>
-define('<%- clean @path %>', function(exports, require) {
+require.register('<%- clean @path %>', function(exports, require) {
 <%- @script %>
 });
