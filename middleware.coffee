@@ -2,12 +2,10 @@
 urlib    = require 'url'
 director = require 'director'
 async    = require 'async'
-winston  = require 'winston'
 { exec } = require 'child_process'
 { _ }    = require 'lodash'
 fs       = _.extend require('fs-extra'), require('fs')
-
-winston.cli()
+log      = require 'node-logging'
 
 # Require builder.
 builder = require './builder.coffee'
@@ -32,7 +30,7 @@ routes = (config) ->
                     type = 'application/javascript;charset=utf-8'
 
             # Warn us.
-            if (''+code)[0] isnt '2' then winston.warn out
+            if (''+code)[0] isnt '2' then log.err out
 
             # Blargh.
             res.writeHead code, 'content-type': type
@@ -113,12 +111,9 @@ module.exports = (opts) ->
 
     # This will take a while.
     ready = no
-    winston.info 'Busy'.bold.blue
 
     # Process config.
     async.waterfall [ (cb) ->
-        winston.info 'Processing our config'
-
         async.waterfall [ (cb) ->
             switch typeof config
                 # Assume is a path to load.
@@ -147,25 +142,20 @@ module.exports = (opts) ->
 
     # Make sure we are clean.
     (cb) ->
-        winston.info 'Remove temp directory'
         fs.remove dir + '/tmp', cb
 
     # Create the build folders for the apps.
     (cb) ->
-        winston.info 'Create temp directory'
         async.eachSeries [ dir + '/tmp/sources', dir + '/tmp/build' ], fs.mkdirs, cb
 
     # Fetch all of the apps sources.
     (cb) ->
-        winston.info 'Fetch apps sources'
         # Jobs to run loading all the apps sources.
         jobs = [] ; folder = 0
 
         process = (path, folder) ->
             (cb) ->
                 async.waterfall [ (cb) ->
-                    winston.data 'Getting ' + path.bold
-
                     # What kind of a job is this?
                     if path.indexOf('git://') is 0
                         # Download a Git repo off the net.
@@ -206,9 +196,6 @@ module.exports = (opts) ->
                 (paths, cb) ->
                     # Build them in series so we can debug which is which.
                     async.eachSeries paths, (path, cb) ->
-                        winston.data('')
-                        winston.data 'Maybe app is in ' + path.bold
-
                         # Read the config file maybe?
                         try
                             data = require(path + '/' + 'config.js')
@@ -227,7 +214,6 @@ module.exports = (opts) ->
                             return cb err if err
 
                             path = [ dir, 'tmp/build', id + '.js' ].join('/')
-                            winston.info 'Writing ' + path.bold
                             fs.writeFile path, js, cb
                     , cb
 
@@ -242,9 +228,11 @@ module.exports = (opts) ->
         async.parallel jobs, cb
     
     ], (err) ->
+        # Trouble?
         throw err if err
+
         ready = yes
-        winston.info 'Ready'.bold.green
+        log.inf 'Ready'
 
         # Init new Director.js router.
         router = new director.http.Router routes(config)

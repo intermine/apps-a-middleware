@@ -1,4 +1,5 @@
 #!/usr/bin/env coffee
+log = require 'node-logging'
 
 # All the handlers we know about.
 rules = [
@@ -19,7 +20,12 @@ module.exports = (path, file, cb) ->
         if file.match rule
             # Process it...
             return require("#{__dirname}/types/#{handler}.coffee") path, file, (err, output) ->
-                return cb err if err
+                if err
+                    # Need to prepend our filename.
+                    log.bad path.split('/').pop() + '/' + file
+                    # Return with the error now.
+                    return cb err
+                
                 # ...adding our type and filename.
                 cb null, [ type, file, output ]
 
