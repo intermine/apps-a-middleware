@@ -11,9 +11,7 @@ builder = require('../builder.coffee');
 builder.client(function() {
     // Setup the Connect middleware.
     app = connect().use(middleware({
-        //'apps': ['git://github.com/intermine/intermine-apps-a.git'],
-        'apps': ['file:///home/radek/dev/intermine-apps-a/'],
-        //'config': __dirname + '/config.json'
+        'apps': ['git://github.com/intermine/intermine-apps-a.git'],
         'config': {}
     })).use(connect["static"](__dirname + '/public'));
 
