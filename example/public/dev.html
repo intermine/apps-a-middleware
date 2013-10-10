@@ -15,9 +15,9 @@
         // Pointing to us, sans `/dev.html` suffix.
         var client = new intermine.appsA(document.location.href.replace(/\/(.*)$/, ''));
         // Load the app.
-        client.load('identifier-resolution', 'body', {
+        client.load('choose-list', 'body', {
             // A callback called at least once.
-            cb: function(err, working, query) {
+            cb: function() {
                 console.log(arguments);
             }
         });
