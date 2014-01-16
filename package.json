@@ -1,7 +1,7 @@
 {
     "name": "apps-a-middleware",
     "author": "Radek <rs676@cam.ac.uk>",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "main": "./index.js",
     "dependencies": {
         "coffee-script": "1.6.2",
@@ -28,7 +28,7 @@
         "type": "git",
         "url": "https://github.com/intermine/apps-a-middleware.git"
     },
-    "scripts": {
-        "start": "example/index.js"
+    "engines": {
+        "node": "0.10.x"
     }
 }
